@@ -13,29 +13,112 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Estado {
   id    Int    @id @default(autoincrement())
-  name  String
-  email String @unique
-
-  tasks Task[]
+  estado  String
+// Relaciones
+  estudiantes Estudiantes[]
+  cursos Cursos[]
+  usuarios Usuario[]
+  asistencias Asistencias[]
+  inscripciones Inscripciones[]
+  
 }
 
-model Category {
+model Estudiantes {
   id   Int    @id @default(autoincrement())
-  name String
+  nombre String
+  apellido String
+  tipo_documento String
+  numero_documento String @unique
+  fecha_nacimiento DateTime
+  correo String @unique
+  telefono String
+  ciudad String  
+  //Llave foránea a estado
+  estadoId Int
+  estado Estado @relation(fields: [estadoId], references: [id])
+  // Relaciones
+  inscripciones Inscripciones[]
+  // AGREGAR ESTOS TIMESTAMPS:
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  
 
-  tasks Task[]
 }
 
-model Task {
-  id          Int     @id @default(autoincrement())
-  title       String
-  description String?
-  completed   Boolean @default(false)
+model Cursos {
+  id   Int    @id @default(autoincrement())
+  codigo_curso String @unique
+  nombre_curso String
+  nivel String
+  descripcion String
+  intensidad Int
+  modalidad String
+  valor Int
+  fecha_inicio DateTime
+  fecha_fin DateTime 
+  // Llaves foráneas
+  usuarioId Int
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  estadoId Int
+  estado Estado @relation(fields: [estadoId], references: [id])
+  //Relaciones
+  inscripciones Inscripciones[]
 
-  user       User?     @relation(fields: [userId], references: [id])
-  userId     Int?
-  category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId Int?
+}
+model Usuario {
+  id   Int    @id @default(autoincrement())
+  usuario String @unique
+  nombre_completo String
+  correo String @unique
+  contraseña String
+  rol String
+  // Llave foránea a estado
+  estadoId Int
+  estado Estado @relation(fields: [estadoId], references: [id])
+  //Relaciones
+  asistencias Asistencias[]
+  cursos Cursos[]
+  
+}
+
+model Asistencias {
+  id   Int    @id @default(autoincrement())
+  fecha_clase DateTime @default(now())
+  observaciones String
+
+  //Llaves foráneas
+  inscripcionesId Int
+  inscripcion   Inscripciones @relation(fields: [inscripcionesId], references: [id], onDelete: Cascade)
+
+  usuarioId Int
+  usuario Usuario       @relation(fields: [usuarioId], references: [id])
+
+  estadoId Int 
+  estado        Estado        @relation(fields: [estadoId], references: [id])
+
+  
+}
+
+model Inscripciones {
+  id          Int     @id @default(autoincrement())
+  fecha_inscripcion       DateTime @default(now())
+
+   // Llaves foráneas
+  estudianteId      Int
+  estudiante        Estudiantes   @relation(fields: [estudianteId], references: [id])
+  
+  cursoId           Int
+  curso             Cursos        @relation(fields: [cursoId], references: [id])
+  
+  estadoId          Int
+  estado            Estado        @relation(fields: [estadoId], references: [id])
+  
+  // Relación uno a muchos con asistencias
+  asistencias       Asistencias[]
+  // AGREGAR TIMESTAMPS:
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
 }
