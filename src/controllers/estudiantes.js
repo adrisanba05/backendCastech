@@ -21,8 +21,9 @@ export const createEstudiante = async (req, res) => {
         apellido,
         tipo_documento,
         numero_documento,
-        fecha_nacimiento: req.body.fecha_nacimiento? 
-          new Date(req.body.fecha_nacimiento): null,
+        fecha_nacimiento: req.body.fecha_nacimiento 
+      ? new Date(req.body.fecha_nacimiento) 
+      : new Date("2000-01-01"),
         correo,
         telefono,
         ciudad,
