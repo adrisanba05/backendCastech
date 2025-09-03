@@ -26,7 +26,7 @@ model Asistencias {
   inscripcionesId Int
   usuarioId       Int
   estadoId        Int
-  Estado          Estado        @relation(fields: [estadoId], references: [id])
+  estado          Estado        @relation(fields: [estadoId], references: [id])
   Inscripciones   Inscripciones @relation(fields: [inscripcionesId], references: [id], onDelete: Cascade)
   Usuario         Usuario       @relation(fields: [usuarioId], references: [id])
 }
@@ -44,7 +44,7 @@ model Cursos {
   fecha_fin     DateTime
   usuarioId     Int
   estadoId      Int
-  Estado        Estado          @relation(fields: [estadoId], references: [id])
+  estado        Estado          @relation(fields: [estadoId], references: [id])
   Usuario       Usuario         @relation(fields: [usuarioId], references: [id])
   Inscripciones Inscripciones[]
 }
@@ -61,8 +61,8 @@ model Estudiantes {
   ciudad           String
   estadoId         Int
   created_at       DateTime        @default(now())
-  updated_at       DateTime
-  Estado           Estado          @relation(fields: [estadoId], references: [id])
+  updated_at       DateTime?
+  estado           Estado          @relation(fields: [estadoId], references: [id])
   Inscripciones    Inscripciones[]
 }
 
@@ -76,7 +76,7 @@ model Inscripciones {
   updated_at        DateTime
   Asistencias       Asistencias[]
   Cursos            Cursos        @relation(fields: [cursoId], references: [id])
-  Estado            Estado        @relation(fields: [estadoId], references: [id])
+  estado            Estado        @relation(fields: [estadoId], references: [id])
   Estudiantes       Estudiantes   @relation(fields: [estudianteId], references: [id])
 }
 
@@ -90,5 +90,5 @@ model Usuario {
   estadoId        Int
   Asistencias     Asistencias[]
   Cursos          Cursos[]
-  Estado          Estado        @relation(fields: [estadoId], references: [id])
+  estado          Estado        @relation(fields: [estadoId], references: [id])
 }
