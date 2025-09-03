@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,115 +8,87 @@ datasource db {
 }
 
 model Estado {
-  id    Int    @id @default(autoincrement())
-  estado  String
-// Relaciones
-  estudiantes Estudiantes[]
-  cursos Cursos[]
-  usuarios Usuario[]
-  asistencias Asistencias[]
-  inscripciones Inscripciones[]
-  @@map("estado") //
-  
-}
+  id            Int             @id @default(autoincrement())
+  estado        String
+  Asistencias   Asistencias[]
+  Cursos        Cursos[]
+  Estudiantes   Estudiantes[]
+  Inscripciones Inscripciones[]
+  Usuario       Usuario[]
 
-model Estudiantes {
-  id   Int    @id @default(autoincrement())
-  nombre String
-  apellido String
-  tipo_documento String
-  numero_documento String @unique
-  fecha_nacimiento DateTime
-  correo String @unique
-  telefono String
-  ciudad String  
-  //Llave foránea a estado
-  estadoId Int
-  estado Estado @relation(fields: [estadoId], references: [id])
-  // Relaciones
-  inscripciones Inscripciones[]
-  // AGREGAR ESTOS TIMESTAMPS:
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @updatedAt @map("updated_at")
-  
-  @@map("estudiantes") //
-}
-
-model Cursos {
-  id   Int    @id @default(autoincrement())
-  codigo_curso String @unique
-  nombre_curso String
-  nivel String
-  descripcion String
-  intensidad Int
-  modalidad String
-  valor Int
-  fecha_inicio DateTime
-  fecha_fin DateTime 
-  // Llaves foráneas
-  usuarioId Int
-  usuario Usuario @relation(fields: [usuarioId], references: [id])
-  estadoId Int
-  estado Estado @relation(fields: [estadoId], references: [id])
-  //Relaciones
-  inscripciones Inscripciones[]
-  @@map("cursos") //
-}
-model Usuario {
-  id   Int    @id @default(autoincrement())
-  usuario String @unique
-  nombre_completo String
-  correo String @unique
-  contraseña String
-  rol String
-  // Llave foránea a estado
-  estadoId Int
-  estado Estado @relation(fields: [estadoId], references: [id])
-  //Relaciones
-  asistencias Asistencias[]
-  cursos Cursos[]
-  @@map("usuario") //
-  
+  @@map("Estado")
 }
 
 model Asistencias {
-  id   Int    @id @default(autoincrement())
-  fecha_clase DateTime @default(now())
-  observaciones String
-
-  //Llaves foráneas
+  id              Int           @id @default(autoincrement())
+  fecha_clase     DateTime      @default(now())
+  observaciones   String
   inscripcionesId Int
-  inscripcion   Inscripciones @relation(fields: [inscripcionesId], references: [id], onDelete: Cascade)
+  usuarioId       Int
+  estadoId        Int
+  Estado          Estado        @relation(fields: [estadoId], references: [id])
+  Inscripciones   Inscripciones @relation(fields: [inscripcionesId], references: [id], onDelete: Cascade)
+  Usuario         Usuario       @relation(fields: [usuarioId], references: [id])
+}
 
-  usuarioId Int
-  usuario Usuario       @relation(fields: [usuarioId], references: [id])
+model Cursos {
+  id            Int             @id @default(autoincrement())
+  codigo_curso  String          @unique
+  nombre_curso  String
+  nivel         String
+  descripcion   String
+  intensidad    Int
+  modalidad     String
+  valor         Int
+  fecha_inicio  DateTime
+  fecha_fin     DateTime
+  usuarioId     Int
+  estadoId      Int
+  Estado        Estado          @relation(fields: [estadoId], references: [id])
+  Usuario       Usuario         @relation(fields: [usuarioId], references: [id])
+  Inscripciones Inscripciones[]
+}
 
-  estadoId Int 
-  estado        Estado        @relation(fields: [estadoId], references: [id])
-  @@map("asistencias") //
-
-  
+model Estudiantes {
+  id               Int             @id @default(autoincrement())
+  nombre           String
+  apellido         String
+  tipo_documento   String
+  numero_documento String          @unique
+  fecha_nacimiento DateTime
+  correo           String          @unique
+  telefono         String
+  ciudad           String
+  estadoId         Int
+  created_at       DateTime        @default(now())
+  updated_at       DateTime
+  Estado           Estado          @relation(fields: [estadoId], references: [id])
+  Inscripciones    Inscripciones[]
 }
 
 model Inscripciones {
-  id          Int     @id @default(autoincrement())
-  fecha_inscripcion       DateTime @default(now())
-
-   // Llaves foráneas
+  id                Int           @id @default(autoincrement())
+  fecha_inscripcion DateTime      @default(now())
   estudianteId      Int
-  estudiante        Estudiantes   @relation(fields: [estudianteId], references: [id])
-  
   cursoId           Int
-  curso             Cursos        @relation(fields: [cursoId], references: [id])
-  
   estadoId          Int
-  estado            Estado        @relation(fields: [estadoId], references: [id])
-  
-  // Relación uno a muchos con asistencias
-  asistencias       Asistencias[]
-  // AGREGAR TIMESTAMPS:
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
-  @@map("inscripciones") //
-  
+  created_at        DateTime      @default(now())
+  updated_at        DateTime
+  Asistencias       Asistencias[]
+  Cursos            Cursos        @relation(fields: [cursoId], references: [id])
+  Estado            Estado        @relation(fields: [estadoId], references: [id])
+  Estudiantes       Estudiantes   @relation(fields: [estudianteId], references: [id])
+}
+
+model Usuario {
+  id              Int           @id @default(autoincrement())
+  usuario         String        @unique
+  nombre_completo String
+  correo          String        @unique
+  contrase_a      String        @map("contraseña")
+  rol             String
+  estadoId        Int
+  Asistencias     Asistencias[]
+  Cursos          Cursos[]
+  Estado          Estado        @relation(fields: [estadoId], references: [id])
 }
