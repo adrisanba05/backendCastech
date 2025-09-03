@@ -54,7 +54,7 @@ export const getEstudiantes = async (req, res) => {
         estado: true,
         inscripciones: {
           include: {
-            curso: true
+            Cursos: true
           }
         }
       },
