@@ -52,7 +52,7 @@ export const getEstudiantes = async (req, res) => {
     const estudiantes = await prisma.estudiantes.findMany({
       include: {
         estado: true,
-        inscripciones: {
+        Inscripciones: {
           include: {
             curso: true
           }
