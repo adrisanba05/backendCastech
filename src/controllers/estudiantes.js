@@ -21,16 +21,18 @@ export const createEstudiante = async (req, res) => {
         apellido,
         tipo_documento,
         numero_documento,
-        fecha_nacimiento: req.body.fecha_nacimiento? new Date(req.body.fecha_nacimiento): null,
+        fecha_nacimiento: req.body.fecha_nacimiento? 
+          new Date(req.body.fecha_nacimiento): null,
         correo,
         telefono,
         ciudad,
-        estadoId: estadoId || 1 // Por defecto activo
+        estado: {
+          connect: { id: estadoId || 1 }
       },
       include: {
-        estado: true  // Incluir información del estado
+        estado: true  // Incluir información de l estado
       }
-    });
+    }});
     res.json(estudiante);
   } catch (error) {
     if (error.code === 'P2002') {
