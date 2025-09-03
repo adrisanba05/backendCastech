@@ -63,7 +63,7 @@ model Estudiantes {
   created_at       DateTime        @default(now())
   updated_at       DateTime?
   estado           Estado          @relation(fields: [estadoId], references: [id])
-  Inscripciones    Inscripciones[]
+  inscripciones    Inscripciones[]
 }
 
 model Inscripciones {
