@@ -29,11 +29,12 @@ export const createEstudiante = async (req, res) => {
         ciudad,
         estado: {
           connect: { id: estadoId || 1 }
+        }
       },
       include: {
         estado: true  // Incluir información de l estado
       }
-    }});
+    });
     res.json(estudiante);
   } catch (error) {
     if (error.code === 'P2002') {
