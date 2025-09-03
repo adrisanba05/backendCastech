@@ -22,8 +22,9 @@ app.use("/api", inscripciones); // Prefijo para nuestras rutas
 
 connect();
 
-//Puesta en marcha de servidor
+// Puesta en marcha de servidor
 const PORT = process.env.PORT || 3001;
+
 app.listen(PORT, () => {
-  console.log(` Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`✅ Servidor corriendo en el puerto ${PORT}`);
 });
