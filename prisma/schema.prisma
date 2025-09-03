@@ -22,6 +22,7 @@ model Estado {
   usuarios Usuario[]
   asistencias Asistencias[]
   inscripciones Inscripciones[]
+  @@map("estado") //
   
 }
 
@@ -44,7 +45,7 @@ model Estudiantes {
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
   
-
+  @@map("estudiantes") //
 }
 
 model Cursos {
@@ -65,7 +66,7 @@ model Cursos {
   estado Estado @relation(fields: [estadoId], references: [id])
   //Relaciones
   inscripciones Inscripciones[]
-
+  @@map("cursos") //
 }
 model Usuario {
   id   Int    @id @default(autoincrement())
@@ -80,6 +81,7 @@ model Usuario {
   //Relaciones
   asistencias Asistencias[]
   cursos Cursos[]
+  @@map("usuario") //
   
 }
 
@@ -97,6 +99,7 @@ model Asistencias {
 
   estadoId Int 
   estado        Estado        @relation(fields: [estadoId], references: [id])
+  @@map("asistencias") //
 
   
 }
@@ -120,5 +123,6 @@ model Inscripciones {
   // AGREGAR TIMESTAMPS:
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
+  @@map("inscripciones") //
   
 }
