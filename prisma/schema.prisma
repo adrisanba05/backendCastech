@@ -13,7 +13,7 @@ model Estado {
   Asistencias   Asistencias[]
   Cursos        Cursos[]
   Estudiantes   Estudiantes[]
-  Inscripciones Inscripciones[]
+  inscripciones Inscripciones[]
   Usuario       Usuario[]
 
   @@map("Estado")
@@ -27,7 +27,7 @@ model Asistencias {
   usuarioId       Int
   estadoId        Int
   estado          Estado        @relation(fields: [estadoId], references: [id])
-  Inscripciones   Inscripciones @relation(fields: [inscripcionesId], references: [id], onDelete: Cascade)
+  inscripciones   Inscripciones @relation(fields: [inscripcionesId], references: [id], onDelete: Cascade)
   Usuario         Usuario       @relation(fields: [usuarioId], references: [id])
 }
 
@@ -46,7 +46,7 @@ model Cursos {
   estadoId      Int
   estado        Estado          @relation(fields: [estadoId], references: [id])
   Usuario       Usuario         @relation(fields: [usuarioId], references: [id])
-  Inscripciones Inscripciones[]
+  inscripciones Inscripciones[]
 }
 
 model Estudiantes {
